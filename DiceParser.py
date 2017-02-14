@@ -169,3 +169,38 @@ class DiceParser:
         else:
             raise ValueError('Unknown Token at {0}'.format(startindex))
         return out
+
+if __name__ == '__main__':
+    DP = DiceParser()
+
+    parseTests = {
+        'Basic Die Roll': ['4d6', '4 6 d'],
+        'Basic Arithmetic': ['1+2-3*4/2+1', '1 2 + 3 4 * 2 / - 1 +']
+    }
+
+    evaluateTests = {
+        'Basic Arithmetic': ['1+2-3*4/2+1', 'Total: -2.0']
+    }
+
+    def runParseTests(tests):
+        for test in tests:
+            try:
+                postfixTokens = DP.InfixToPostfix(tests[test][0])
+                postfixForm = ' '.join(t['val'] for t in postfixTokens)
+                if tests[test][1] == postfixForm:
+                    print(test + ': Success')
+                else:
+                    print(test + ': Failed\nActual Result: ' + postfixForm)
+            except Exception as err:
+                print(test + ': Failed\nError: ' + err)
+
+    def runEvaluateTests(tests):
+        for test in tests:
+            try:
+                value = DP.evaluateInfix(tests[test][0])
+                if tests[test][1] == value:
+                    print(test + ': Success')
+                else:
+                    print(test + ': Failed\nActual Result: ' + value)
+            except Exception as err:
+                print(test + ': Failed\nError: ' + err)
